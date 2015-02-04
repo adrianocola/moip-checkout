@@ -1,12 +1,12 @@
 {
-  "name": "moip-node",
+  "name": "moip-checkout",
   "version": "0.1.0",
   "author": "Adriano Cola",
   "description": "Complete MoIP Transparent Checkout API for Node.js",
   "main": "./lib/moip.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adrianocola/moip-node"
+    "url": "https://github.com/adrianocola/moip-checkout"
   },
   "keywords": [
     "moip",

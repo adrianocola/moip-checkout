@@ -1,13 +1,12 @@
-var should = require('should');
-var Payment = require('../lib/payment');
+var PaymentBuilder = require('../lib/paymentBuilder');
 
-describe('Payment', function () {
+describe('PaymentBuilder', function () {
 
     describe('JSON', function () {
 
         it('should set Instituicao', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setInstituicao("Visa");
 
             p.json.should.have.property("Instituicao","Visa");
@@ -16,7 +15,7 @@ describe('Payment', function () {
 
         it('should set Parcelas', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setParcelas(1);
 
             p.json.should.have.property("Parcelas","1");
@@ -25,7 +24,7 @@ describe('Payment', function () {
 
         it('should set CartaoCredito', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setCartaoCredito("4000000000000004","12/16","123","Nome Sobrenome","30/12/1987","(11)3165-4020","222.222.222-22");
 
             p.json.should.have.property("CartaoCredito",{
@@ -44,7 +43,7 @@ describe('Payment', function () {
 
         it('should set Cofre', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setCofre("0b2118bc-fdca-4a57-9886-366326a8a647","123");
 
             p.json.should.have.property("CartaoCredito",{Cofre: "0b2118bc-fdca-4a57-9886-366326a8a647", CodigoSeguranca: "123"});
@@ -57,7 +56,7 @@ describe('Payment', function () {
 
         it('should generate base JSON', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
 
             var json = p.build();
 
@@ -67,7 +66,7 @@ describe('Payment', function () {
 
         it('should generate full JSON with Cofre', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setInstituicao("Visa");
             p.setParcelas(1);
             p.setCofre("0b2118bc-fdca-4a57-9886-366326a8a647","123");
@@ -90,7 +89,7 @@ describe('Payment', function () {
 
         it('should generate full JSON with CartaoCredito', function () {
 
-            var p = new Payment();
+            var p = new PaymentBuilder();
             p.setInstituicao("Visa");
             p.setParcelas(1);
             p.setCartaoCredito("4000000000000004","12/16","123","Nome Sobrenome","30/12/1987","(11)3165-4020","222.222.222-22");

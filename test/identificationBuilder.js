@@ -1,52 +1,51 @@
-var should = require('should');
-var Builder = require('../lib/builder');
+var IdentificationBuilder = require('../lib/identificationBuilder');
 
-describe('Builder', function () {
+describe('IdentificationBuilder', function () {
 
     describe('JSON', function () {
 
         it('should set Razao', function () {
 
-            var b = new Builder();
-            b.setRazao("123456789");
+            var i = new IdentificationBuilder();
+            i.setRazao("123456789");
 
-            b.json.should.have.property("Razao","123456789");
+            i.json.should.have.property("Razao","123456789");
 
         });
 
         it('should set IdProprio', function () {
 
-            var b = new Builder();
-            b.setIdProprio("123456789");
+            var i = new IdentificationBuilder();
+            i.setIdProprio("123456789");
 
-            b.json.should.have.property("IdProprio","123456789");
+            i.json.should.have.property("IdProprio","123456789");
 
         });
 
         it('should set URLNotificacao', function () {
 
-            var b = new Builder();
-            b.setURLNotificacao("http://test.com");
+            var i = new IdentificationBuilder();
+            i.setURLNotificacao("http://test.com");
 
-            b.json.should.have.property("URLNotificacao","http://test.com");
+            i.json.should.have.property("URLNotificacao","http://test.com");
 
         });
 
         it('should set URLRetorno', function () {
 
-            var b = new Builder();
-            b.setURLRetorno("http://test.com");
+            var i = new IdentificationBuilder();
+            i.setURLRetorno("http://test.com");
 
-            b.json.should.have.property("URLRetorno","http://test.com");
+            i.json.should.have.property("URLRetorno","http://test.com");
 
         });
 
         it('should set Valores Valor', function () {
 
-            var b = new Builder();
-            b.setValores(10);
+            var i = new IdentificationBuilder();
+            i.setValores(10);
 
-            b.json["Valores"].should.eql({
+            i.json["Valores"].should.eql({
                 "Valor": {
                     "$": {"moeda": "BRL"},
                     _: "10.00"
@@ -58,10 +57,10 @@ describe('Builder', function () {
 
         it('should set Valores Acrescimo', function () {
 
-            var b = new Builder();
-            b.setValores(10, 2);
+            var i = new IdentificationBuilder();
+            i.setValores(10, 2);
 
-            b.json["Valores"].should.eql({
+            i.json["Valores"].should.eql({
                 "Valor": {
                     "$": {"moeda": "BRL"},
                     _: "10.00"
@@ -76,10 +75,10 @@ describe('Builder', function () {
 
         it('should set Valores Deducao', function () {
 
-            var b = new Builder();
-            b.setValores(10, 2, 1);
+            var i = new IdentificationBuilder();
+            i.setValores(10, 2, 1);
 
-            b.json["Valores"].should.eql({
+            i.json["Valores"].should.eql({
                 "Valor": {
                     "$": {"moeda": "BRL"},
                     _: "10.00"
@@ -98,10 +97,10 @@ describe('Builder', function () {
 
         it('should set Valores Moeda', function () {
 
-            var b = new Builder();
-            b.setValores(10, 2, 1, "USD");
+            var i = new IdentificationBuilder();
+            i.setValores(10, 2, 1, "USD");
 
-            b.json["Valores"].should.eql({
+            i.json["Valores"].should.eql({
                 "Valor": {
                     "$": {"moeda": "USD"},
                     _: "10.00"
@@ -120,11 +119,11 @@ describe('Builder', function () {
 
         it('should add Parcelamentos', function () {
 
-            var b = new Builder();
-            b.addParcelamento(2,10,"AVista",1.5,true);
-            b.addParcelamento(5,8,"Parcelado");
+            var i = new IdentificationBuilder();
+            i.addParcelamento(2,10,"AVista",1.5,true);
+            i.addParcelamento(5,8,"Parcelado");
 
-            b.json["Parcelamentos"]["Parcelamento"][0].should.eql({
+            i.json["Parcelamentos"]["Parcelamento"][0].should.eql({
                 "MinimoParcelas": 2,
                 "MaximoParcelas": 10,
                 "Recebimento": "AVista",
@@ -132,7 +131,7 @@ describe('Builder', function () {
                 "Repassar": true
             });
 
-            b.json["Parcelamentos"]["Parcelamento"][1].should.eql({
+            i.json["Parcelamentos"]["Parcelamento"][1].should.eql({
                 "MinimoParcelas": 5,
                 "MaximoParcelas": 8,
                 "Recebimento": "Parcelado",
@@ -144,10 +143,10 @@ describe('Builder', function () {
 
         it('should set Recebedor', function () {
 
-            var b = new Builder();
-            b.setRecebedor("recebedor_secundario","apelido_recebedor");
+            var i = new IdentificationBuilder();
+            i.setRecebedor("recebedor_secundario","apelido_recebedor");
 
-            b.json["Recebedor"].should.eql({
+            i.json["Recebedor"].should.eql({
                 "LoginMoIP": "recebedor_secundario",
                 "Apelido": "apelido_recebedor"
             });
@@ -156,10 +155,10 @@ describe('Builder', function () {
 
         it('should set Pagador', function () {
 
-            var b = new Builder();
-            b.setPagador("José da Silva","abc123@abc.com","cliente_1234");
+            var i = new IdentificationBuilder();
+            i.setPagador("José da Silva","abc123@abc.com","cliente_1234");
 
-            b.json["Pagador"].should.eql({
+            i.json["Pagador"].should.eql({
                 "Nome": "José da Silva",
                 "Email": "abc123@abc.com",
                 "IdPagador": "cliente_1234",
@@ -170,8 +169,8 @@ describe('Builder', function () {
 
         it('should set Pagador Endereco Cobranca', function () {
 
-            var b = new Builder();
-            b.setPagadorEnderecoCobranca(
+            var i = new IdentificationBuilder();
+            i.setPagadorEnderecoCobranca(
                 "Avenida Brigadeiro Faria Lima",
                 "12345",
                 "casa 2",
@@ -183,7 +182,7 @@ describe('Builder', function () {
                 "(11)4321-8765"
             );
 
-            b.json["Pagador"]["EnderecoCobranca"].should.eql({
+            i.json["Pagador"]["EnderecoCobranca"].should.eql({
                 "Logradouro": "Avenida Brigadeiro Faria Lima",
                 "Numero": "12345",
                 "Complemento": "casa 2",
@@ -199,23 +198,23 @@ describe('Builder', function () {
 
         it('should add FormasPagamentos', function () {
 
-            var b = new Builder();
-            b.addFormaPagamento("BoletoBancario");
-            b.addFormaPagamento("CartaoDeCredito");
+            var i = new IdentificationBuilder();
+            i.addFormaPagamento("BoletoBancario");
+            i.addFormaPagamento("CartaoDeCredito");
 
-            b.json["FormasPagamento"]["FormaPagamento"][0].should.eql("BoletoBancario");
-            b.json["FormasPagamento"]["FormaPagamento"][1].should.eql("CartaoDeCredito");
+            i.json["FormasPagamento"]["FormaPagamento"][0].should.eql("BoletoBancario");
+            i.json["FormasPagamento"]["FormaPagamento"][1].should.eql("CartaoDeCredito");
 
         });
 
         it('should add Mensagem', function () {
 
-            var b = new Builder();
-            b.addMensagem("Message 1");
-            b.addMensagem("Message 2");
+            var i = new IdentificationBuilder();
+            i.addMensagem("Message 1");
+            i.addMensagem("Message 2");
 
-            b.json["Mensagens"]["Mensagem"][0].should.eql("Message 1");
-            b.json["Mensagens"]["Mensagem"][1].should.eql("Message 2");
+            i.json["Mensagens"]["Mensagem"][0].should.eql("Message 1");
+            i.json["Mensagens"]["Mensagem"][1].should.eql("Message 2");
 
         });
 
@@ -223,10 +222,10 @@ describe('Builder', function () {
 
             var d = new Date();
 
-            var b = new Builder();
-            b.setBoleto(d, 10, "Corridos", "http://google.com","12345","12345","12345");
+            var i = new IdentificationBuilder();
+            i.setBoleto(d, 10, "Corridos", "http://google.com","12345","12345","12345");
 
-            b.json["Boleto"].should.eql({
+            i.json["Boleto"].should.eql({
                 "DataVencimento": d,
                 "DiasExpiracao": {
                     $: {"Tipo": "Corridos"},
@@ -247,9 +246,9 @@ describe('Builder', function () {
 
         it('should generate base XML', function () {
 
-            var b = new Builder();
+            var i = new IdentificationBuilder();
 
-            var xml = b.build();
+            var xml = i.build();
 
             xml.should.be.equal(
                 "<EnviarInstrucao>" +
@@ -263,16 +262,16 @@ describe('Builder', function () {
 
             var d = new Date();
 
-            var b = new Builder();
-            b.setRazao("123456789");
-            b.setIdProprio("123456789");
-            b.setURLNotificacao("http://test.com");
-            b.setURLRetorno("http://test.com");
-            b.setValores(10, 2, 1);
-            b.addParcelamento(2,10,"AVista",1.5,true);
-            b.setRecebedor("recebedor_secundario","apelido_recebedor");
-            b.setPagador("José da Silva","abc123@abc.com","cliente_1234");
-            b.setPagadorEnderecoCobranca(
+            var i = new IdentificationBuilder();
+            i.setRazao("123456789");
+            i.setIdProprio("123456789");
+            i.setURLNotificacao("http://test.com");
+            i.setURLRetorno("http://test.com");
+            i.setValores(10, 2, 1);
+            i.addParcelamento(2,10,"AVista",1.5,true);
+            i.setRecebedor("recebedor_secundario","apelido_recebedor");
+            i.setPagador("José da Silva","abc123@abc.com","cliente_1234");
+            i.setPagadorEnderecoCobranca(
                 "Avenida Brigadeiro Faria Lima",
                 "12345",
                 "casa 2",
@@ -283,13 +282,13 @@ describe('Builder', function () {
                 "03961-090",
                 "(11)4321-8765"
             );
-            b.addFormaPagamento("BoletoBancario");
-            b.addFormaPagamento("CartaoDeCredito");
-            b.addMensagem("Message 1");
-            b.addMensagem("Message 2");
-            b.setBoleto(d, 10, "Corridos", "http://teste.com/img.png","12345","12345","12345");
+            i.addFormaPagamento("BoletoBancario");
+            i.addFormaPagamento("CartaoDeCredito");
+            i.addMensagem("Message 1");
+            i.addMensagem("Message 2");
+            i.setBoleto(d, 10, "Corridos", "http://teste.com/img.png","12345","12345","12345");
 
-            var xml = b.build();
+            var xml = i.build();
 
             xml.should.be.equal(
                 "<EnviarInstrucao>" +

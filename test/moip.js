@@ -3,6 +3,41 @@ var PaymentBuilder = require("../lib/paymentBuilder");
 var MoIP = require("../lib/moip");
 var rewire = require("rewire");
 
+function generateIdentification(){
+
+    var i = new IdentificationBuilder();
+    i.setRazao("Razão / Motivo do pagamento");
+    i.setIdProprio(+new Date());
+    i.setValores(1);
+    i.setPagador("José da Silva","abc123@abc.com","cliente_1234");
+    i.setPagadorEnderecoCobranca(
+        "Avenida Brigadeiro Faria Lima",
+        "12345",
+        "casa 2",
+        "Pinheiros",
+        "São Paulo",
+        "SP",
+        "BRA",
+        "03961-090",
+        "(11)4321-8765"
+    );
+
+    return i;
+
+}
+
+function generatePayment(){
+
+    var p = new PaymentBuilder();
+    p.setInstituicao("Visa");
+    p.setParcelas(1);
+    p.setCartaoCredito("4000000000000004","12/16","123","Nome Sobrenome","30/12/1987","(11)3165-4020","222.222.222-22");
+
+    return p;
+
+}
+
+
 describe('MoIP', function () {
 
     describe('builders', function () {
@@ -63,24 +98,9 @@ describe('MoIP', function () {
         it('should send identification to sandbox', function (done) {
             this.timeout(10000);
 
-            var i = new IdentificationBuilder();
-            i.setRazao("Razão / Motivo do pagamento");
-            i.setIdProprio(+new Date());
-            i.setValores(1);
-            i.setPagador("José da Silva","abc123@abc.com","cliente_1234");
-            i.setPagadorEnderecoCobranca(
-                "Avenida Brigadeiro Faria Lima",
-                "12345",
-                "casa 2",
-                "Pinheiros",
-                "São Paulo",
-                "SP",
-                "BRA",
-                "03961-090",
-                "(11)4321-8765"
-            );
-
             var moip = new MoIP({sandbox: true});
+
+            var i = generateIdentification();
 
             moip.identification(i.build(),function(err,resp){
 
@@ -129,31 +149,13 @@ describe('MoIP', function () {
         it('should send payment to sandbox', function (done) {
             this.timeout(10000);
 
-            var i = new IdentificationBuilder();
-            i.setRazao("Razão / Motivo do pagamento");
-            i.setIdProprio(+new Date());
-            i.setValores(1);
-            i.setPagador("José da Silva","abc123@abc.com","cliente_1234");
-            i.setPagadorEnderecoCobranca(
-                "Avenida Brigadeiro Faria Lima",
-                "12345",
-                "casa 2",
-                "Pinheiros",
-                "São Paulo",
-                "SP",
-                "BRA",
-                "03961-090",
-                "(11)4321-8765"
-            );
-
             var moip = new MoIP({sandbox: true});
+
+            var i = generateIdentification();
 
             moip.identification(i.build(),function(err,resp){
 
-                var p = new PaymentBuilder();
-                p.setInstituicao("Visa");
-                p.setParcelas(1);
-                p.setCartaoCredito("4000000000000004","12/16","123","Nome Sobrenome","30/12/1987","(11)3165-4020","222.222.222-22");
+                var p = generatePayment();
 
                 moip.payment(p.build(),resp.Token,function(err,resp){
 
@@ -168,6 +170,44 @@ describe('MoIP', function () {
 
                 });
 
+
+            });
+
+
+        });
+
+    });
+
+    describe('status', function () {
+
+        it('should check payment status', function (done) {
+            this.timeout(10000);
+
+            var moip = new MoIP({sandbox: true});
+
+            var i = generateIdentification();
+
+            moip.identification(i.build(),function(err,resp){
+
+                var p = generatePayment();
+                var token = resp.Token;
+
+                moip.payment(p.build(),resp.Token,function(err,resp){
+
+                    moip.status(token,function(err,resp){
+
+                        resp.should.have.property("Status","Sucesso");
+                        resp.should.have.property("Autorizacao");
+                        resp.Autorizacao.should.have.property("Pagador");
+                        resp.Autorizacao.should.have.property("EnderecoCobranca");
+                        resp.Autorizacao.should.have.property("Recebedor");
+                        resp.Autorizacao.should.have.property("Pagamento");
+                        resp.Autorizacao.Pagamento.should.have.property("CodigoMoIP");
+
+                        done();
+                    });
+
+                });
 
             });
 

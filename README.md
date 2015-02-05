@@ -1,4 +1,4 @@
-moip-node
+moip-checkout
 =========
 
-Pagamento MoIP com NodeJS
+Pagamento MoIP Checkout Transparente com NodeJS
